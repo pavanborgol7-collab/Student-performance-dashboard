@@ -7,8 +7,22 @@ import streamlit as st
 st.set_page_config(page_title="Student Performance", layout="wide")
 st.title("Student Performance Dashboard")
 
-MODEL_PATH = Path("models/pass_fail_pipeline.joblib")
-DATA_PATH = Path("DATA/Student_performance_10k.csv")
+def first_existing(*paths):
+    for path in paths:
+        candidate = Path(path)
+        if candidate.exists():
+            return candidate
+    return Path(paths[0])
+
+
+MODEL_PATH = first_existing(
+    "models/pass_fail_pipeline.joblib",
+    "pass_fail_pipeline.joblib",
+)
+DATA_PATH = first_existing(
+    "DATA/Student_performance_10k.csv",
+    "Student_performance_10k.csv",
+)
 
 
 @st.cache_resource
